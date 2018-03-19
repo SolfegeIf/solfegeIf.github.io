@@ -1,0 +1,97 @@
+<!DOCTYPE HTML>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Responsive Piano Display - jQuery & CSS demo</title>
+  <style>
+    body {
+      margin: 2px;
+    }
+
+    #piano {
+      position: relative;
+      width: 100%;
+    }
+
+    .white_key {
+      position: absolute;
+      top: 0;
+      background-color: #fff;
+      border-radius: 0 0 2px 2px;
+      border: solid #000 1px;
+    }
+
+    .black_key {
+      position: absolute;
+      top: 0;
+      background-color: #000;
+      border-radius: 0 0 3px 3px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <div id="piano"></div>
+  <script src="../js/jquery.js"></script>
+  <script>
+    var topRegister = 5;
+    $(document).ready(function() {
+      paintPiano();
+    });
+    $(window).resize(function() {
+      paintPiano();
+    });
+    $('#numRegisters').change(function() {
+      topRegister = parseInt($('#numRegisters').val()) + 1;
+      $('#piano').html("");
+      paintPiano();
+    });
+
+    function paintPiano() {
+      // determine screen
+      var scx = $('#piano').width();
+      var scy = $('#piano').height();
+
+      // what is the width of a white note if 7 registers should fit full width of screen
+      var noteWidth = Math.floor(scx / (topRegister - 1) / 7 - 1 - 1); // subtract 1 for one border edge, accomodate for
+      var noteHeight = Math.floor((noteWidth + 1) * 5.5);
+      // iterate over 7 registers painting white keys
+      var left = 0;
+      for (var register = 1; register <= topRegister; register++) {
+        for (var quickNote = 1; quickNote <= 7; quickNote++) {
+          // bad naming convention but it gets the job done
+          var str = "<div id=\"reg" + register + "_note" + quickNote + "\" class=\"note white_key\"></div>";
+          $('#piano').append(str);
+          $('#reg' + register + '_note' + quickNote).css("width", noteWidth).css("height", noteHeight).css("left", left);;
+          $('#reg' + register + '_note' + quickNote).css("border", 'solid #000 1px');
+          left += noteWidth + 1; // because this has 1px border on Each side, accommodating for it, the other 1 border is covered by next div
+          if (register == topRegister) {
+            break;
+          } // this gives us the highest C
+        }
+      }
+      // now paint the black keys with a different, algorithmically proportional width and height
+      noteHeight *= 0.63;
+      noteWidth -= 6;
+      left = noteWidth - (noteWidth / 2) + 1 + 6;
+      for (var register = 1; register < topRegister; register++) {
+        for (var quickNote = 1; quickNote <= 7; quickNote++) {
+          // exclude 3rd and last
+          if (quickNote != 3 && quickNote != 7) {
+            // bad naming convention but it gets the job done
+            var str = "<div id=\"breg" + register + "_note" + quickNote + "\" class=\"note black_key\"></div>";
+            $('#piano').append(str);
+            $('#breg' + register + '_note' + quickNote).css("width", noteWidth);
+            $('#breg' + register + '_note' + quickNote).css("height", noteHeight);
+            $('#breg' + register + '_note' + quickNote).css("left", left);
+          }
+          left += noteWidth + 1 + 6;
+        }
+      }
+    }
+  </script>
+</body>
+
+</html>

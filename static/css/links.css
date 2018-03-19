@@ -1,0 +1,8 @@
+.categorie{
+  font-weight: bold;
+}
+
+.categorie:focus{
+  color: black;
+  font-weight: bold;
+}

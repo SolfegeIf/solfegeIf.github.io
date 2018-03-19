@@ -1,0 +1,11 @@
+<html>
+<head>
+<script src="jquery-2.0.3.js"></script>
+</head>
+<body>
+	<form action="." method="POST">
+		<input type="text" name="text">
+		<input type="submit" value="enviar" name="my-form">
+	</form>
+</body>
+</html>
